@@ -1,5 +1,6 @@
 import numpy as np
 from collections import Counter
+import matplotlib.pyplot as plt
 
 class KNN:
   def __init__(self,k=3):
@@ -28,6 +29,33 @@ class KNN:
       predictions.append(prediction)
     return np.array(predictions)
 
+  def plot(self, X_test=None, y_test=None):
+    for label in np.unique(self.y_train):
+
+        plt.scatter(
+            self.X_train[self.y_train == label][:, 0],
+            self.X_train[self.y_train == label][:, 1],
+            label=f"Class {label}"
+        )
+
+    if X_test is not None:
+
+        plt.scatter(
+            X_test[:, 0],
+            X_test[:, 1],
+            marker="x",
+            s=100,
+            label="Test Points"
+        )
+
+    plt.xlabel("Feature 1")
+    plt.ylabel("Feature 2")
+
+    plt.title(f"KNN Classification (K={self.k})")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
 
 if __name__ == "__main__":
     X_train = np.array([
@@ -51,3 +79,4 @@ if __name__ == "__main__":
     model.fit(X_train,y_train)
     predictions = model.predict(X_test)
     print(predictions)
+    model.plot(X_test)

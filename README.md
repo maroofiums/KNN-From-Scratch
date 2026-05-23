@@ -27,19 +27,21 @@ d=\sqrt{\sum_{i=1}^{n}(x_i-y_i)^2}
 $$
 ---
 
-## Project Structure
+# Project Structure
 
-```
+```text
 knn-from-scratch/
-│── main.py        # Main implementation
-│── README.md     # Documentation
+├── KNN Plot.png
+├── README.md
+└── main.py
 ```
 
 ---
 
-## Features
+# Features
 
 * Pure Python + NumPy implementation
+* Data visualization using Matplotlib
 * No external ML libraries
 * Supports multi-class classification
 * Easy to understand and extend
@@ -47,7 +49,7 @@ knn-from-scratch/
 
 ---
 
-## How It Works
+# How It Works
 
 1. Store training dataset
 2. For each test sample:
@@ -59,13 +61,31 @@ knn-from-scratch/
 
 ---
 
-## Code Implementation
+# KNN Visualization
+
+The project also includes a plotting function using Matplotlib to visualize:
+
+* Training points
+* Test points
+* Class distribution
+
+## Example Plot
+
+
+![KNN Plot](KNN_Plot.png)
+
+---
+
+# Code Implementation
 
 ```python
 import numpy as np
+import matplotlib.pyplot as plt
 from collections import Counter
 
+
 class KNN:
+
     def __init__(self, k=3):
         self.k = k
 
@@ -77,6 +97,7 @@ class KNN:
         return np.sqrt(np.sum((x1 - x2) ** 2))
 
     def predict_single(self, x):
+
         distances = []
 
         for x_train in self.X_train:
@@ -84,22 +105,88 @@ class KNN:
             distances.append(distance)
 
         k_indices = np.argsort(distances)[:self.k]
+
         k_nearest_labels = [self.y_train[i] for i in k_indices]
 
         most_common = Counter(k_nearest_labels).most_common(1)
+
         return most_common[0][0]
 
     def predict(self, X):
-        return np.array([self.predict_single(x) for x in X])
+
+        predictions = []
+
+        for x in X:
+            prediction = self.predict_single(x)
+            predictions.append(prediction)
+
+        return np.array(predictions)
+
+    def plot(self, X_test=None, y_test=None):
+        for label in np.unique(self.y_train):
+
+            plt.scatter(
+                self.X_train[self.y_train == label][:, 0],
+                self.X_train[self.y_train == label][:, 1],
+                label=f"Class {label}"
+            )
+
+        if X_test is not None:
+
+            plt.scatter(
+                X_test[:, 0],
+                X_test[:, 1],
+                marker="x",
+                s=100,
+                label="Test Points"
+            )
+
+        plt.xlabel("Feature 1")
+        plt.ylabel("Feature 2")
+
+        plt.title(f"KNN Classification (K={self.k})")
+        plt.legend()
+        plt.grid(True)
+        plt.show()
+
+
+if __name__ == "__main__":
+
+    X_train = np.array([
+        [1,2],
+        [2,3],
+        [3,4],
+        [4,5],
+        [5,6],
+        [7,8],
+        [8,9]
+    ])
+
+    y_train = np.array([0,0,0,0,1,1,1])
+
+    X_test = np.array([
+        [2,2],
+        [7,7]
+    ])
+
+    model = KNN(k=3)
+
+    model.fit(X_train, y_train)
+
+    predictions = model.predict(X_test)
+
+    print(predictions)
+
+    model.plot(X_test)
 ```
 
 ---
 
-## Example Usage
+# Example Usage
 
 ```python
 import numpy as np
-from knn import KNN
+from main import KNN
 
 X_train = np.array([
     [1,2],
@@ -119,55 +206,61 @@ X_test = np.array([
 ])
 
 model = KNN(k=3)
+
 model.fit(X_train, y_train)
 
 predictions = model.predict(X_test)
+
 print(predictions)
+
+model.plot(X_test)
 ```
 
 Output:
 
-```
+```text
 [0 1]
 ```
 
 ---
 
-## Time Complexity
+# Time Complexity
 
 For each prediction:
 
-* Distance computation: O(n)
-* Sorting: O(n log n)
+* Distance computation → `O(n)`
+* Sorting → `O(n log n)`
 
-Overall:
+Overall complexity:
 
-```
+```text
 O(n log n)
 ```
 
 ---
 
-## Limitations
+# Limitations
 
 * Slow for large datasets
 * Sensitive to feature scaling
-* Requires storing entire dataset
+* Requires storing the full dataset
 * No training phase (lazy learning)
 
 ---
 
-## Improvements You Can Add
+# Improvements You Can Add
 
 * Weighted KNN
 * Feature scaling (Standardization)
 * KD-Tree optimization
 * KNN regression
-* Distance metrics (Manhattan, Minkowski)
+* Manhattan distance
+* Minkowski distance
+* Decision boundary visualization
 
 ---
 
-## Why This Project Matters
+# Why This Project Matters
 
 This project helps you understand:
 
@@ -175,7 +268,8 @@ This project helps you understand:
 * Distance metrics
 * Decision boundaries
 * Lazy learning algorithms
+* Core ML fundamentals
 
-It is a strong foundation for understanding real-world ML systems.
+It is a strong beginner-friendly machine learning project and a good foundation for understanding real-world ML systems.
 
 ---
