@@ -22,9 +22,11 @@ It works by:
 ## Formula Used
 
 Euclidean Distance:
-$$
-d=\sqrt{\sum_{i=1}^{n}(x_i-y_i)^2}
-$$
+
+```math
+d = \sqrt{\sum_{i=1}^{n}(x_i-y_i)^2}
+```
+
 ---
 
 # Project Structure
