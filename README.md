@@ -23,9 +23,9 @@ It works by:
 
 Euclidean Distance:
 
-```math
-d = \sqrt{\sum_{i=1}^{n}(x_i-y_i)^2}
-```
+$$
+  d = \sqrt{\sum_{i=1}^{n}(x_i-y_i)^2}
+$$
 
 ---
 
